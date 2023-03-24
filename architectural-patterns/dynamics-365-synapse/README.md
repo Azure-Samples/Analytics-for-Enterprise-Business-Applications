@@ -8,15 +8,19 @@ This architecture will outline how to implement a Data Lakehouse by ingesting da
 
 ## Architecture Overview
 
+This architecture presents a fictitious scenario where Dynamics 365 Customer Insight (CI) is used for customer segmentation. The data necessary for customer segmentation is coming from multiple sources, and they need to go through some transformation before it can be used by Customer Insight.
+
+Azure Synapse Analytics is used to collect data from multiple sources, process and curate it for consumption. Customer details data is ingested from Dynamics 365 Sales. Customer financial data (income, spend etc.) is loaded manually via a CSV file.
+
+Synapse Analytics serves the processed data in a lake database. Customer Insight pulls this data and derive customer segments from it.
+
 Here is the architecture diagram of the solution:
 
-![Analytics via Synapse Link and Azure Synapse](../../images/analytics-dyn365-databricks.drawio.svg)
+![Analytics via Synapse Link and Azure Synapse](../../images/analytics-dyn365-synapse.drawio.svg)
 
 This solution follows a [medallion architecture](https://learn.microsoft.com/en-us/azure/databricks/lakehouse/medallion) which describes a series of data layers that denote the quality of data stored in the lakehouse. The terms bronze (raw), silver (validated), and gold (enriched) describe the quality of the data in each of these layers. ADLS Gen2 is used as the underlying storage layer.
 
-Data from dataverse to the Bronze layer is loaded using [Synapse Link for Dataverse](https://learn.microsoft.com/en-us/power-apps/maker/data-platform/export-to-data-lake). Databricks jobs will process the data and move it to Silver and then Gold layer.
-
-For visualization, Power BI dashboard consumes the data from the Gold layer. Next the Power BI dashboard is published in Dynamics 365 via a Model Driven Power App.
+Data from dataverse to the Bronze layer is loaded using [Synapse Link for Dataverse](https://learn.microsoft.com/en-us/power-apps/maker/data-platform/export-to-data-lake). Synapse Analytics jobs will process the data and move it to Silver and then Gold layer.
 
 ## Key Design Considerations
 
@@ -33,32 +37,29 @@ For visualization, Power BI dashboard consumes the data from the Gold layer. Nex
 
 ## Solution
 
-This solution will spin up a demo Dynamics 365 Customer Insight environment and copy the Account table via Synapse Link for Dataverse. During the transformation and enrichment phase, this data will be joined with a sample dataset and loaded to the Gold layer.
-
 ### Prerequisite
 
-- Dynamics Sales Environment
-- 
+Dynamics 365 Environment and the storage account has to be in the same Azure region.
 
-### Import customer.csv file as Custom table using import from the Sales Trial environment.
+- Dynamics 365 Sales Environment
+- Dynamics 365 Customer Insight Environment
+- Azure Synapse Analytics
+- ADLS Gen2 Storage Account
+- Data files - customer.csv and customer_finance.csv.
 
-- steps
+Steps to implement the solution are listed below.
 
-### Copy the data using synapse link for dataverse to a storage account.
+1. Load *customer.csv* to dataverse
 
-- steps
+The *customer.csv* file is available in the data folder of this repository. Files can be uploaded to dataverse from this page - https://make.powerapps.com/.
 
-### Silver to Gold Layer
+<img src="./../../images/csv_to_dataverse.gif" width="600" height="400" />
 
-- steps
+1. Set up *Synapse Link for Dataverse*
 
-### Power BI Dashboard
+*Synapse Link for Dataverse* is used to copy dataverse tables to storage account. Dataverse and the storage account have to be in the same Azure region for *Synapse Link for Dataverse* to work.
 
-- steps
-
-### Publish Power BI Dashboard to Dynamics 365
-
-- steps
+<img src="./../../images/synapse_link_dataverse.gif" width="600" height="400" />
 
 ## Limitations
 

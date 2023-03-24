@@ -20,13 +20,15 @@ In many cases, these reports/dashboards are published to the business apps, so t
 
 The following diagram presents a traditional high level architecture of doing DataOps and MLOps on top of two business apps - CRM and ERP.
 
+![Business App Analytics](./images/business-app-analytics.drawio.svg)
+
 Real life implementation can be different from this architecture depending on the choice of the technology and requirements.
 
 ## Architectural Patterns
 
 Architectural patterns refer to reusable solutions that can be applied to common problems in software development. The following section presents sample implementation of analytics and machine learning for specific enterprise business application.
 
-- [Data Lakehouse - Microsoft Dynamics 365 and Azure Databricks](./architectural-patterns/dynamics-365-databricks/README.md)
+- [Data Lakehouse - Microsoft Dynamics 365 and Azure Synapse Analytics](./architectural-patterns/dynamics-365-synapse/README.md)
 
 ## References
 
