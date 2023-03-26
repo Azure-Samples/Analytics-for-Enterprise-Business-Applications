@@ -44,11 +44,9 @@ No data in the Bronze layer will be updated or deleted, data will be only added 
 
 There are multiple options to build a database in Synapse Analytics, like dedicated SQL pool, lake database and serverless SQL pool. The Azure Synapse connector for Customer Insight only supports lake database to pull data. So the Gold layer is served using a lake database in Synapse Analytics.
 
-## Technical Samples
+## Technical Sample
 
 ### Prerequisite
-
-Dynamics 365 Environment and the storage account has to be in the same Azure region.
 
 - Dynamics 365 Sales Environment
 - Dynamics 365 Customer Insight Environment
@@ -56,44 +54,49 @@ Dynamics 365 Environment and the storage account has to be in the same Azure reg
 - ADLS Gen2 Storage Account
 - Data files - customer.csv and customer_finance.csv.
 
+Dynamics 365 Environment and the storage account has to be in the same Azure region.
+
 Steps to implement the solution are listed below.
 
-1. Load *customer.csv* to dataverse
+### 1. Load *customer.csv* to dataverse
 
-The *customer.csv* file is available in the data folder of this repository. Files can be uploaded to dataverse from this page - https://make.powerapps.com/. Name the new table *customer*.
+The *customer.csv* file is available in the data folder of this repository. This file is used to populate the customer table in dataverse environment of Dynamics 365 Sales. Files can be uploaded to dataverse from this page - https://make.powerapps.com/.
 
 <img src="./../../images/csv_to_dataverse.gif" width="600" height="400" />
 
-2. Set up *Synapse Link for Dataverse*
+### 2. Set up *Synapse Link for Dataverse*
 
 *Synapse Link for Dataverse* is used to copy dataverse tables to storage account. Dataverse and the storage account have to be in the same Azure region for *Synapse Link for Dataverse* to work. This will create a container in the storage account named *dataverse-[DATAVERSE_ENVIRONMENT_NAME]-[GUID]*. Under this container, it will create a folder for the table.
 
 <img src="./../../images/synapse_link_dataverse.gif" width="600" height="400" />
 
-3. Prepare data lake containers
+### 3. Prepare data lake containers
 
-Create three containers in the storage account - bronze, silver and gold.
+Create three containers in the storage account - bronze, silver and gold. These three containers represents the three layer of the medallion architecture.
 
 ![storage account containers](../../images/storage_account.png)
 
-4. Prepare RAW layer
+### 4. Prepare RAW layer
 
-Data from different sources will be loaded to the raw layer. While loading to raw layer, data is kept as close to the source data. The code for loading data to RAW layer is available in this notebook [prepare_bronze.ipynb](./code/prepare_bronze.ipynb)
+Data from different sources will be loaded to the raw layer. The code for loading data to RAW layer is available in this notebook [prepare_bronze.ipynb](./code/prepare_bronze.ipynb)
 
-5. Prepare SILVER layer
+### 5. Prepare SILVER layer
 
 Once data is loaded to the RAW layer, the next step is to clean and standardize the data and load it to SILVER layer. The code for loading data to SILVER layer is available in this notebook [prepare_silver.ipynb](./code/prepare_silver.ipynb)
 
-6. Prepare GOLD layer
+### 6. Prepare GOLD layer
 
 The code for loading data to GOLD layer is available in this notebook [prepare_gold.ipynb](./code/prepare_gold.ipynb)
 
-7. Import data to Customer Insight
+### 7. Import data to Customer Insight
 
-Customer Insight will import the data from Synapse Analytics.
+Customer Insight will import the data from the GOLD layer of Synapse Analytics lake database.
 
-8. Create customer segments
+<img src="./../../images/synapse_to_ci_data_copy.gif" width="600" height="400" />
 
+### 8. Create customer profile
+
+The imported data from the GOLD layer will be used to implement the unified customer profile in Customer Insight.
 
 ## Limitations
 

@@ -46,8 +46,8 @@ Real life implementation can be different from this architecture depending on th
 
 Architectural patterns refer to reusable solutions that can be applied to common problems in software development. The following section presents sample implementation of analytics and machine learning for specific enterprise business application. Though the samples focuses on a specific use case (customer 360 view), the implementation is quite generic and can be easily extended for other use cases.
 
-- [Customer 360 - Microsoft Dynamics 365 and Azure Synapse Analytics](./customer360-d365-synapse.md)
-- [Customer 360 - Microsoft Dynamics 365 and Azure Databricks](./customer360-d365-databricks.md)
+- [Customer 360 - Microsoft Dynamics 365 and Azure Synapse Analytics](./architectural-patterns/customer360-d365-synapse/README.md)
+- [Customer 360 - Microsoft Dynamics 365 and Azure Databricks](./architectural-patterns/customer360-d365-databricks/README.md)
 
 ## References
 
